@@ -1,6 +1,7 @@
-# thời gian combat mặc định
+# Thời gian cooldown mặc định (giây)
 cooldown-seconds: 30
 
+# Danh sách lệnh bị chặn trong cooldown
 blocked-commands:
   - msg
   - pl

@@ -1,4 +1,8 @@
-cooldown-message: "§bCobmat: %time%"
-no_permission: "&cBạn không có quyền sử dụng lệnh này!" 
+# Thông báo cooldown
+cooldown-message: "§cVui lòng đợi §e%time%§c giây!"
+# Thông báo không thể dùng lệnh
 no_command: "&cBạn không thể dùng lệnh này ngay bây giờ!"
-Plugin_reloaded: "&bPlugin dã relaod thành công!"
+# Thông báo reload plugin
+Plugin_reloaded: "&bPlugin đã reload thành công!"
+# Thông báo không có quyền
+no_permission: "&cBạn không có quyền sử dụng lệnh này!" 
