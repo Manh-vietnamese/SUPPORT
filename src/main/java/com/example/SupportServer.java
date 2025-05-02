@@ -1,0 +1,124 @@
+package com.example;
+
+import com.example.utils.ConfigManager;
+import com.example.utils.CooldownManager;
+import com.example.Messager.Messager;
+import com.example.listeners.DamageListener;
+import com.example.listeners.PlayerCommandListener;
+import com.example.listeners.PlayerDeathListener;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
+import java.io.File;
+
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class SupportServer extends JavaPlugin {
+    private Messager Messager;
+    private ConfigManager configManager;
+    private CooldownManager cooldownManager;
+    private ProtocolManager protocolManager;
+
+    @Override
+    public void onEnable() {
+        // Check for ProtocolLib first
+        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null) {
+            getLogger().severe("ProtocolLib không được cài đặt! Plugin sẽ tắt.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+        this.protocolManager = ProtocolLibrary.getProtocolManager();
+
+        // Initialize config and cooldown managers after ProtocolLib check
+        saveDefaultConfig();
+        checkAndCreateConfig();
+
+        this.Messager = new Messager(getDataFolder());
+        this.configManager = new ConfigManager(this);
+        this.cooldownManager = new CooldownManager(this);
+        
+        // Đăng ký reload command
+        this.getCommand("supportserver").setExecutor(new ReloadCommand(this));
+
+        // Register listeners and commands
+        getServer().getPluginManager().registerEvents(new DamageListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerCommandListener(this), this);
+        
+        // Đăng ký listener mới
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
+    }
+
+    @Override
+    public void onDisable() {
+        if (cooldownManager != null) {
+            cooldownManager.cleanup();
+        } 
+    }
+
+    // Thêm phương thức reload toàn bộ
+    public void reloadPlugin() {
+        configManager.reloadConfig();
+        Messager.reload(); // Reload messages.yml
+        getLogger().info("Plugin đã được reload!");
+    }
+
+    // Getter methods
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public CooldownManager getCooldownManager() {
+        return cooldownManager;
+    }
+
+    public ProtocolManager getProtocolManager() {
+        return protocolManager;
+    }
+    
+    public Messager getMessager() {
+        return Messager;
+    }
+
+    // Inner class xử lý lệnh reload
+    private static class ReloadCommand implements org.bukkit.command.CommandExecutor {
+        private final SupportServer plugin;
+
+        public ReloadCommand(SupportServer plugin) {
+            this.plugin = plugin;
+        }
+
+        @Override
+        public boolean onCommand(org.bukkit.command.CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+            if (!sender.hasPermission("Sunflower.SP.admin")) {
+                sender.sendMessage(plugin.getMessager().get("no_permission"));
+                return true;
+            }
+
+            if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+                plugin.reloadPlugin();
+                sender.sendMessage(plugin.getMessager().get("Plugin_reloaded"));
+                return true;
+            }
+            return false;
+        }
+    }
+        private void checkAndCreateConfig() {
+        createFile("config.yml", true);
+        createFile("messages.yml", false);
+    }
+
+    private void createFile(String fileName, boolean isConfig) {
+        File file = new File(getDataFolder(), fileName);
+        if (!file.exists()) {
+            getLogger().warning("⚠️ Không tìm thấy " + fileName + "! Đang tạo file mới...");
+            if (isConfig) {
+                saveDefaultConfig();
+                reloadConfig();
+            } else {
+                saveResource(fileName, false);
+            }
+            getLogger().info("✅ File " + fileName + " đã được khôi phục!");
+        }
+    }
+}

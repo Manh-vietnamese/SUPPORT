@@ -1,0 +1,8 @@
+# thời gian combat mặc định
+cooldown-seconds: 12
+
+blocked-commands:
+  - msg
+  - pl
+  - w
+  - tpa
