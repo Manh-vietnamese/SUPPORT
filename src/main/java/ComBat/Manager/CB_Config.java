@@ -1,4 +1,4 @@
-package com.example.utils;
+package ComBat.Manager;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ConfigManager {
+public class CB_Config {
     
     private int cooldownSeconds;
     private String cooldownMessage;
@@ -17,7 +17,7 @@ public class ConfigManager {
     private Set<String> blockedCommands = new HashSet<>();
     private Map<String, String> placeholders = new HashMap<>();
 
-    public ConfigManager(JavaPlugin plugin) {
+    public CB_Config(JavaPlugin plugin) {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
         this.config = plugin.getConfig(); // Thêm dòng này để khởi tạo config

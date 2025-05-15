@@ -1,4 +1,4 @@
-package com.example.Messager;
+package ComBat.Messager;
 
 import java.io.File;
 import java.io.IOException;

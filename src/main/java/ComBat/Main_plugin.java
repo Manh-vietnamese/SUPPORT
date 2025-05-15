@@ -1,11 +1,11 @@
-package com.example;
+package ComBat;
 
-import com.example.utils.ConfigManager;
-import com.example.utils.CooldownManager;
-import com.example.Messager.Messager;
-import com.example.listeners.DamageListener;
-import com.example.listeners.PlayerCommandListener;
-import com.example.listeners.PlayerDeathListener;
+import ComBat.Manager.CB_Config;
+import ComBat.Manager.CB_Cooldown;
+import ComBat.Messager.Messager;
+import ComBat.listeners.CB_Damage;
+import ComBat.listeners.CB_PlayerCommand;
+import ComBat.listeners.CB_PlayerDeath;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
@@ -14,10 +14,10 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class SupportServer extends JavaPlugin {
+public class Main_plugin extends JavaPlugin {
     private Messager Messager;
-    private ConfigManager configManager;
-    private CooldownManager cooldownManager;
+    private CB_Config configManager;
+    private CB_Cooldown cooldownManager;
     private ProtocolManager protocolManager;
 
     @Override
@@ -35,18 +35,16 @@ public class SupportServer extends JavaPlugin {
         checkAndCreateConfig();
 
         this.Messager = new Messager(getDataFolder());
-        this.configManager = new ConfigManager(this);
-        this.cooldownManager = new CooldownManager(this);
+        this.configManager = new CB_Config(this);
+        this.cooldownManager = new CB_Cooldown(this);
         
         // Đăng ký reload command
         this.getCommand("supportserver").setExecutor(new ReloadCommand(this));
 
         // Register listeners and commands
-        getServer().getPluginManager().registerEvents(new DamageListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerCommandListener(this), this);
-        
-        // Đăng ký listener mới
-        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
+        getServer().getPluginManager().registerEvents(new CB_Damage(this), this);
+        getServer().getPluginManager().registerEvents(new CB_PlayerCommand(this), this);
+        getServer().getPluginManager().registerEvents(new CB_PlayerDeath(this), this);
     }
 
     @Override
@@ -64,11 +62,11 @@ public class SupportServer extends JavaPlugin {
     }
 
     // Getter methods
-    public ConfigManager getConfigManager() {
+    public CB_Config getConfigManager() {
         return configManager;
     }
 
-    public CooldownManager getCooldownManager() {
+    public CB_Cooldown getCooldownManager() {
         return cooldownManager;
     }
 
@@ -82,9 +80,9 @@ public class SupportServer extends JavaPlugin {
 
     // Inner class xử lý lệnh reload
     private static class ReloadCommand implements org.bukkit.command.CommandExecutor {
-        private final SupportServer plugin;
+        private final Main_plugin plugin;
 
-        public ReloadCommand(SupportServer plugin) {
+        public ReloadCommand(Main_plugin plugin) {
             this.plugin = plugin;
         }
 

@@ -1,22 +1,22 @@
-package com.example.utils;
+package ComBat.Manager;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.example.SupportServer;
+import ComBat.Main_plugin;
 
 import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
-public class ActionBarManager {
+public class CB_ActionBar {
     private final ProtocolManager protocolManager;
-    private final SupportServer plugin;
+    private final Main_plugin plugin;
 
-    public ActionBarManager(ProtocolManager protocolManager) {
+    public CB_ActionBar(ProtocolManager protocolManager) {
         this.protocolManager = protocolManager;
-        this.plugin = SupportServer.getPlugin(SupportServer.class);
+        this.plugin = Main_plugin.getPlugin(Main_plugin.class);
     }
 
     public void sendCustomActionBar(Player player, String message) { // Bỏ tham số yOffset không dùng

@@ -1,4 +1,4 @@
-package com.example.utils;
+package ComBat.Manager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,17 +7,17 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.example.SupportServer;
+import ComBat.Main_plugin;
 
-public class CooldownManager {
-    private final SupportServer plugin;
-    private final ActionBarManager actionBarManager;
+public class CB_Cooldown {
+    private final Main_plugin plugin;
+    private final CB_ActionBar actionBarManager;
     private final Map<UUID, Long> cooldowns = new HashMap<>();
     private final Map<UUID, Integer> runningTasks = new HashMap<>();
     
-    public CooldownManager(SupportServer plugin) {
+    public CB_Cooldown(Main_plugin plugin) {
         this.plugin = plugin;
-        this.actionBarManager = new ActionBarManager(plugin.getProtocolManager());
+        this.actionBarManager = new CB_ActionBar(plugin.getProtocolManager());
     }
     
     public void applyCooldown(Player player) {
